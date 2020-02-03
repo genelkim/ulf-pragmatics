@@ -9,7 +9,7 @@
   (and (symbolp ulf) (equal ulf '?)))
 
 
-(defun get-response-to-presupposition-failure (ulf)
+(defun get-response-to-bw-presupposition-failure (ulf)
 ; ```````````````````````````````````````````````````
 ; Gets relevant (task-specific) response in the blocks world domain
 ; in the case of presupposition failure for a question. This is done
@@ -18,7 +18,7 @@
 ; the ULF of the presupposition.
 ;
   (negate-wh-question-presupposition (get-wh-question-presupposition ulf))
-) ; END get-response-to-presupposition-failure
+) ; END get-response-to-bw-presupposition-failure
 
 
 (defun get-wh-question-presupposition (ulf)
@@ -76,8 +76,8 @@
 
 
 ;; (mapcar (lambda (ulf)
-;;   (format t "~a~%" (ulf2english:ulf2english (get-response-to-presupposition-failure ulf))))
-;;   ;; (format t "~a~%" (get-response-to-presupposition-failure ulf)))
+;;   (format t "~a~%" (ulf2english:ulf2english (get-response-to-bw-presupposition-failure ulf))))
+;;   ;; (format t "~a~%" (get-response-to-bw-presupposition-failure ulf)))
 ;; '(
 ;;  (((THE.D (|Twitter| BLOCK.N)) ((PRES BE.V) (ON.P (THE.D (|SRI | BLOCK.N))))) ?)
 ;;  (((WHAT.D BLOCK.N) ((PRES BE.V) (ON.P (THE.D (|SRI | BLOCK.N))))) ?)
