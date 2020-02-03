@@ -12,7 +12,7 @@
   (if (not (tensed-verb? ulf))
     nil
     (first (ulf:find-vp-head ulf))))
-    
+
 
 (defun tense-of-sent! (ulf)
 ;``````````````````````````
@@ -49,7 +49,7 @@
                ;; Phrase and tense already found.
                (tense (cons found tense))
                ;; Phrase found but no tense.
-               (found (cons found 
+               (found (cons found
                             (if (ulf:tensed-sent? curulf)
                               (tense-of-sent! curulf)
                               nil)))
@@ -70,7 +70,7 @@
 (defparameter *infer-possession-from-genitives*
   '(/ ((!1 poss-det?) (!2 noun?))
       ((!1 !2)
-       (poss-det-to-possessor! !1) 
+       (poss-det-to-possessor! !1)
        (have.v (poss-noun-to-possession-form! !2)))))
 
 
@@ -95,7 +95,7 @@
                   (list np
                         (replace-vp-head untensed-vp (list tense hv)))))
             untensed-res))
-    
+
     (mapcar
       #'(lambda (x)
           (make-instance
@@ -107,16 +107,20 @@
             :src-full-ulf ulf))
       tensed-res)))
 
-;; Substitute relativizer 
+(defun infer-possession-from-genitives-raw (ulf)
+  (mapcar #'result-formula (infer-possession-from-genitives ulf)))
+
+
+;; Substitute relativizer
 (defun subst-relativizer! (newval ulfwrel)
   (subst-if newval #'ulf:lex-rel? ulfwrel))
 (defun subst-relativizer-apply-subrep! (newval ulfwrel)
   (util:hide-ttt-ops
-    (nth-value 
+    (nth-value
       1 (ulf:apply-sub-macro ; TODO: write another sub-macro function that just returns the value...
-          (nth-value 
+          (nth-value
             1 (ulf:apply-rep-macro
-                (subst-relativizer! newval 
+                (subst-relativizer! newval
                                     (util:unhide-ttt-ops ulfwrel))
                 :calling-package :ulf-pragmatics))
           :calling-package :ulf-pragmatics))))
@@ -134,20 +138,73 @@
                 _*5))
       (subst-relativizer-apply-subrep! (!1 _!2) !4)))
 
-
 (defun infer-np+preds-embedded-relative-clause (ulf)
   (all-ttt-rule-inf-result *infer-np+preds-embedded-relative-clause* ulf))
 (defun infer-n+preds-embedded-relative-clause (ulf)
   (all-ttt-rule-inf-result *infer-n+preds-embedded-relative-clause* ulf))
 
 
-(defun infer-possession-from-genitives-raw (ulf)
-  (mapcar #'result-formula (infer-possession-from-genitives ulf)))
+;; Infer existence from n+preds/np+preds
+;; (the.d (n+preds X Y)) -> ((some.d X) ((<tense> be.v) Y))
+;; TODO(gene): handle this more generally by implementing n+preds expansion and
+;; then running (the.d x) -> (some.d x) inference.
+
+;; TTT rule that matches definite n+preds expressions and generates a list of
+;; 1. the original expression, and
+;; 2. the definite expression with the noun from n+preds.
+;; 3. a tense-less propositional verb phrase asserting the existence of a thing
+;;    that satisfies the post-modifying predicate.
+(defparameter *infer-existence-from-definite-n+preds-ttt*
+  '(/ ((!1 ulf:det?)
+       (n+preds _!2 _*3
+                (!4 ~ ulf:relativized-sent?) ; must be a simple predicate
+                _*5))
+      (; original expression
+       (!1 (n+preds _!2 _!3 !4 _*5))
+       ; subject
+       (some.d _!2)
+       ; propositional vp
+       (be.v !4))))
+
+;; TODO(gene): generalize this to anything that takes a TTT rule that generates
+;; a triple, an inference name, and returns a function that takes a ulf, tenses
+;; the result and wraps it in inf-result.
+(defun infer-existence-from-definite-n+preds (ulf)
+  (let (untensed-res tensed-res)
+    (setf untensed-res
+          (mapcar #'result-formula
+                  (all-ttt-rule-inf-result
+                    *infer-existence-from-definite-n+preds-ttt*
+                    ulf)))
+    (setf tensed-res
+          (mapcar
+            #'(lambda (res)
+                (let* ((original-expr (first res))
+                       (subj (second res))
+                       (untensed-vp (third res))
+                       (tense (tense-of-phrase ulf original-expr))
+                       (hv (find-vp-head untensed-vp)))
+                  (list subj
+                        (replace-vp-head untensed-vp (list tense hv)))))
+            untensed-res))
+    (mapcar
+      #'(lambda (x)
+          (make-instance
+            'inf-result
+            :result-formula (util:unhide-ttt-ops x)
+            :inf-rule 'existence-from-definite-n+preds
+            :src-local-ulf nil
+            :src-parent-ulf nil
+            :src-full-ulf ulf))
+      tensed-res)))
+
 
 (defun premacro-sit-inferences (ulf)
   (cdar (results-from-applying-rules
           (list #'infer-possession-from-genitives
                 #'infer-np+preds-embedded-relative-clause
-                #'infer-n+preds-embedded-relative-clause)
+                #'infer-n+preds-embedded-relative-clause
+                #'infer-existence-from-definite-n+preds
+                )
           (list ulf) t)))
 
