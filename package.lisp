@@ -6,7 +6,8 @@
 (defpackage :ulf-pragmatics
   (:use :cl :ttt :cl-strings :cl-json :ulf-lib :lisp-unit :cl-util :ulf2english)
   (:shadow :insert)
-  (:export infer-all))
+  (:export infer-all
+           get-response-to-bw-presupposition-failure))
 
 ;; Global variables.
 (in-package :ulf-pragmatics)

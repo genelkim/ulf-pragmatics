@@ -20,5 +20,6 @@
                (:file "implicative-weak-inferences")
                (:file "situational-inferences")
                (:file "bw-inferences")
-               (:file "inference"))) 
+               (:file "inference")
+               (:file "blocks-world-question-presuppositions")))
 

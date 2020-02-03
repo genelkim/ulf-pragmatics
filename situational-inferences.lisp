@@ -169,6 +169,7 @@
 ;; TODO(gene): generalize this to anything that takes a TTT rule that generates
 ;; a triple, an inference name, and returns a function that takes a ulf, tenses
 ;; the result and wraps it in inf-result.
+;; TODO(gnee): add test.
 (defun infer-existence-from-definite-n+preds (ulf)
   (let (untensed-res tensed-res)
     (setf untensed-res
