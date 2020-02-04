@@ -9,15 +9,15 @@
   (and (symbolp ulf) (equal ulf '?)))
 
 
-(defun get-response-to-bw-presupposition-failure (ulf &key (calling-package nil))
-; `````````````````````````````````````````````````````````````````````````````````
+(defun get-response-to-bw-presupposition-failure (rawulf &key (calling-package nil))
+; `````````````````````````````````````````````````````````````````````````````````````
 ; Gets relevant (task-specific) response in the blocks world domain
 ; in the case of presupposition failure for a question. This is done
 ; by generating the relevant presuppositions, choosing the relevant one
 ; to reply to (currently just the first/only one in the list), and negating
 ; the ULF of the presupposition.
 ;
-  (util:inout-intern (ulf input :ulf-pragmatics :callpkg calling-package)
+  (util:inout-intern (rawulf ulf :ulf-pragmatics :callpkg calling-package)
     (negate-wh-question-presupposition (get-wh-question-presupposition ulf)))
 ) ; END get-response-to-bw-presupposition-failure
 
