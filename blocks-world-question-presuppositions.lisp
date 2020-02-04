@@ -10,7 +10,7 @@
 
 
 (defun get-response-to-bw-presupposition-failure (ulf)
-; ```````````````````````````````````````````````````
+; ```````````````````````````````````````````````````````
 ; Gets relevant (task-specific) response in the blocks world domain
 ; in the case of presupposition failure for a question. This is done
 ; by generating the relevant presuppositions, choosing the relevant one
@@ -30,7 +30,9 @@
       (ttt:apply-rule '(/ ((sub (at.p (what.d place.n)) _!) qmark?)
                          (you.pro ((pres know.v) (ans-to (sub where.pq _!))))) ulf))
     ((ttt:match-expr '(^* (of.p (what.d color.n))) ulf)
-      (car (mapcar #'normalize-wh-question-presupposition (infer-existence-from-definite-n+preds ulf))))
+      (if (ttt:match-expr '(^* most-n) ulf)
+        (car (mapcar #'normalize-wh-question-presupposition (infer-existence-from-bw-superlative ulf)))
+        (car (mapcar #'normalize-wh-question-presupposition (infer-existence-from-definite-n+preds ulf)))))
     (t (car (mapcar #'normalize-wh-question-presupposition (infer-presuppositions-from-wh-q ulf)))))
 ) ; END get-wh-question-presuppositions
 
@@ -46,7 +48,9 @@
       (/ (some.d (ulf:adj? (! ulf:noun? (plur ulf:noun?)))) (some.d !))
       (/ (nquan (somehow.mod-a many.a)) some.d)
       (/ (I.pro ((past ulf:verb?) _! (adv-e (! (^* (some.d _!1))))))
-         (I.pro ((past ulf:verb?) _!))))
+         (I.pro ((past ulf:verb?) _!)))
+      (/ ((a.d _!) ((tense? be.v) _*))
+         ((some.d _!) ((tense? be.v) _*))))
     (output-ulf-normalization (result-formula ulf)))
 ) ; END normalize-wh-question-presupposition
 
