@@ -45,7 +45,7 @@
 ; ~~~~~~~~~~~~~~~~~~~
 ; E.g., true of VB, VBZ, AUX, BE, etc.
 ; As noted in "initialize-and-preprocess.lisp", the isa-scheme used here
-; makes V, AUX, and (copular) BE disjoint, so they need to be separately 
+; makes V, AUX, and (copular) BE disjoint, so they need to be separately
 ; checked for.
  (if (not (symbolp atm)) nil
      (or (isa atm 'v) (isa atm 'aux) (isa atm 'be))))
@@ -54,7 +54,7 @@
 ;~~~~~~~~~~~~~~~~~~~
 ; e.g., (AUXD was); needed for changing progressive "be" to a PRG-form
 ;
- (and (not (atom pair)) 
+ (and (not (atom pair))
       (member pair '((AUX be) (AUXZ am) (AUXZ is) (AUXP are) (AUXD was)
                          (AUXD were)) :test 'equal)))
 
@@ -71,21 +71,21 @@
 
 (defun pp-cat? (atm)
 ; ~~~~~~~~~~~~~~~~~
-; E.g., true of 'PP-ABOUT, 'PP-FROM, etc. The instances are from 
+; E.g., true of 'PP-ABOUT, 'PP-FROM, etc. The instances are from
 ;    "/u/schubert/lf*/initialize-and-preprocess.lisp",
-; augmented with some from A.P.'s code. If that file has been loaded, 
+; augmented with some from A.P.'s code. If that file has been loaded,
 ; then we can use the fast method below,
-;  (defun PP-CAT? (atm) (if (symbolp atm) (eq (get atm 'isa) 'pp)))   
+;  (defun PP-CAT? (atm) (if (symbolp atm) (eq (get atm 'isa) 'pp)))
 ; or even
 ;  (defun pp-cat? (atm) (isa atm 'pp)) [I've changed to that for now...]
 ; instead of the listing that I've commented out.
- (if (not (symbolp atm)) nil 
+ (if (not (symbolp atm)) nil
      (isa atm 'pp)))
-  ;  (find atm 
+  ;  (find atm
   ;  '(PP-ABOVE PP-ABOUT PP-ACROSS PP-AFTER PP-AGAINST PP-ALONG PP-AMONG
   ;    PP-AROUND PP-AS PP-AT PP-BEFORE PP-BEHIND PP-BELOW PP-BENEATH
-  ;    PP-BESIDE PP-BETWEEN PP-BETWIXT PP-BEYOND PP-BY PP-DESPITE 
-  ;    PP-DOWN PP-DURING PP-FOR PP-FROM PP-IN PP-INSIDE PP-INTO PP-LIKE 
+  ;    PP-BESIDE PP-BETWEEN PP-BETWIXT PP-BEYOND PP-BY PP-DESPITE
+  ;    PP-DOWN PP-DURING PP-FOR PP-FROM PP-IN PP-INSIDE PP-INTO PP-LIKE
   ;    PP-NEAR PP-NOTWITHSTANDING PP-OF PP-OFF PP-ON PP-ONTO PP-OUTSIDE
   ;    PP-OUT-OF PP-OVER PP-SINCE PP-THROUGH PP-THROUGHOUT PP-TO PP-TOWARD
   ;    PP-UNDER PP-UNDERNEATH PP-UNTIL PP-UP PP-UPON PP-WITH PP-WITHIN
@@ -98,10 +98,10 @@
 (defun postmodifying-pp-cat? (atm)
 ; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; E.g., PP-ABOUT, PP-BY, PP-OF, ..., i.e., PPs that should stay attached
-;    to the smallest NP on their immediate left, rather than being 
+;    to the smallest NP on their immediate left, rather than being
 ;    "raised" to modify a larger NP or other phrase
  (if (not (symbolp atm)) nil
-     (find atm '(PP-ABOUT PP-AGAINST PP-BY PP-FOR PP-FROM PP-INTO 
+     (find atm '(PP-ABOUT PP-AGAINST PP-BY PP-FOR PP-FROM PP-INTO
        PP-OF PP-OFF PP-ONTO PP-OUT-OF PP-OVER PP-THROUGH PP-TO))))
 
 (defun loc-p-tree? (expr)
@@ -112,7 +112,7 @@
      (and (eq (car expr) 'IN)
           (member (second expr)
            '(ABOVE ACROSS AGAINST ALONG AROUND AT BEHIND BELOW BENEATH
-             BESIDE BETWEEN BETWIXT BEYOND BY DOWN IN INSIDE NEAR 
+             BESIDE BETWEEN BETWIXT BEYOND BY DOWN IN INSIDE NEAR
              ON OUTSIDE OVER THROUGH THROUGHOUT UNDER UNDERNEATH UP
              UPON WITH WITHIN)))))
 
@@ -143,19 +143,19 @@
 ; just look at constituent patterns.
 ;
  (or (ttt:match-expr '((RB (! not n\'t never))) (cdr advp))
-     (ttt:match-expr 
-       '((* (RB _!)) 
+     (ttt:match-expr
+       '((* (RB _!))
          (_! (! accordingly admittedly apparently assuredly certainly
-                conceivably consequently definitely ever fortunately 
-                frequently luckily maybe naturally obviously 
-                occasionally of-course of_course often perhaps perchance 
-                possibly potentially rarely reportedly sometimes 
-                surprisingly undoubtedly unexpectedly unfortunately 
-                unluckily unsurprisingly))) 
+                conceivably consequently definitely ever fortunately
+                frequently luckily maybe naturally obviously
+                occasionally of-course of_course often perhaps perchance
+                possibly potentially rarely reportedly sometimes
+                surprisingly undoubtedly unexpectedly unfortunately
+                unluckily unsurprisingly)))
      (cdr advp))
      ; **any other patterns?? More complex ones?
   )); end of sentence-modifying-advp?
-        
+
 
 ; **THIS IS A TASK-SPECIFIC STUB (FOR A SET OF PHOTOS), TO BE GENERALIZED
 (defun nn-human? (expr)
@@ -200,16 +200,16 @@
 ;
  (if (listp atm) nil
      (member atm
-      '(ABOVE.P ACROSS.P AGAINST.P ALONG.P AROUND.P AT.P BEHIND.P BELOW.P 
-        BENEATH.P BESIDE.P BETWEEN.P BETWIXT.P BEYOND.P BY.P DOWN.P IN.P 
-        INSIDE.P NEAR.P ON.P OUTSIDE.P OVER.P THROUGH.P THROUGHOUT.P 
+      '(ABOVE.P ACROSS.P AGAINST.P ALONG.P AROUND.P AT.P BEHIND.P BELOW.P
+        BENEATH.P BESIDE.P BETWEEN.P BETWIXT.P BEYOND.P BY.P DOWN.P IN.P
+        INSIDE.P NEAR.P ON.P OUTSIDE.P OVER.P THROUGH.P THROUGHOUT.P
         UNDER.P UNDERNEATH.P UP.P UPON.P WITH.P WITHIN.P))))
 
 (defun numeral-pred? (x); e.g., 'four.a'
 ; ~~~~~~~~~~~~~~~~~
- (if (not (symbolp x)) 
+ (if (not (symbolp x))
      nil ; ** could be generalized to complex numerals
-     (case x 
+     (case x
        ((two.a three.a four.a five.a six.a seven.n eight.a nine.a
          ten.a eleven.a twelve.a thirteen.a fourteen.a fifteen.a
          sixteen.a seventeen.a eighteen.a nineten.a twenty.a) x)
@@ -225,8 +225,8 @@
           grandson.n son.n brother.n father.n dad.n daddy.n grandfather.n
           grandpa.n granddad.n gramps.n nephew.n cousin.n uncle.n
           granddaughter.n daughter.n sister.n mother.n mom.n mommy.n
-          grandmother.n grandma.n grandmom.n granny.n niece.n aunt.n 
-          auntie.n spouse.n husband.n wife.n friend.n boyfriend.n 
+          grandmother.n grandma.n grandmom.n granny.n niece.n aunt.n
+          auntie.n spouse.n husband.n wife.n friend.n boyfriend.n
           girlfriend.n partner.n fiance.n fiancee.n boss.n employer.n
           employee.n room-mate.n office-mate.n coworker.n coach.n
           basketball-coach.n football-coach.n baseball-coach.n
@@ -238,8 +238,8 @@
           interior.n exterior.n volume.n population.n contents.n area.n
           top.n bottom.n side.n back.n front.n rest.n remainder.n
           ; some milestone personal events
-          graduation.n wedding.n engagement.n funeral.n 
-          birth.n birthday.n bar-mitzvah.n bat-mitzvah.n 
+          graduation.n wedding.n engagement.n funeral.n
+          birth.n birthday.n bar-mitzvah.n bat-mitzvah.n
           win.n loss.n victory.n triumph.n induction.n introduction.n
           appointment.n promotion.n election.n
          ) t))) t)
@@ -267,8 +267,8 @@
 ; this minor inefficiency shouldn't matter.
 ;
   (cond ((not (symbolp x)) x)
-        ((lacks-dot-extension x) 
-         (intern (coerce 
+        ((lacks-dot-extension x)
+         (intern (coerce
                     (append (coerce (string x) 'list) '(#\- #\O #\F))
                     'string)))
         (t (intern (coerce
@@ -277,7 +277,7 @@
                     'string)))
  )); end of append-of!
 
-; (defun quan? ...) not included here -- it is defined in 
+; (defun quan? ...) not included here -- it is defined in
 ; /u/schubert/lf*/logical-form-predicates.lisp
 ; However, unless quantifiers are type-flagged with values like
 ; det, dt, d, or quan, only quantifiers on the following explicit
@@ -293,8 +293,8 @@
 ;                         (originally  ./process-and-align-caption.lisp)
 
 
-; (defun subst! (x y z) (subst x y z)); synonym -- defined this way in 
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  ; ./process-and-align-caption.lisp 
+; (defun subst! (x y z) (subst x y z)); synonym -- defined this way in
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  ; ./process-and-align-caption.lisp
 ; N.B.: It is assumed that 'expr' contains only UNBOUND occurrences
 ; of x.
 
@@ -307,7 +307,7 @@
 
 (defun male-skolem? (x)
 ;~~~~~~~~~~~~~~~~~~~~~
-; e.g., uncle3.sk (as constructed in Skolemizing "uncle" in something 
+; e.g., uncle3.sk (as constructed in Skolemizing "uncle" in something
 ; like "John and his uncle"). Return the type, e.g., 'DAD', 'GRANDPA'
 ; (can use in asserting name-based facts or in forward TTT rules).
 ;
@@ -319,7 +319,7 @@
          (setq lst (reverse (member-if-not #'digit-char-p (reverse lst))))
          (setq sym (intern (coerce lst 'string)))
          (find sym '(father dad grandfather granddad grandpa son
-                       grandson brother bro uncle nephew 
+                       grandson brother bro uncle nephew
                        boyfriend husband groom coach)))
                    ; currently these are all relational, but we could
                    ; also have 'guy', 'fellow', 'man', 'boy', 'shaman', etc.
@@ -327,7 +327,7 @@
 
 (defun female-skolem? (x)
 ;~~~~~~~~~~~~~~~~~~~~~~~~
-; e.g., aunt3.sk (as constructed in Skolemizing "aunt" in something 
+; e.g., aunt3.sk (as constructed in Skolemizing "aunt" in something
 ; like "John and his aunt"). Return the type, e.g., 'MOTHER', 'GRANDMA'
 ; (can use in asserting name-based facts or in forward TTT rules).
 ;
@@ -339,13 +339,13 @@
          (setq lst (reverse (member-if-not #'digit-char-p (reverse lst))))
          (setq sym (intern (coerce lst 'string)))
          (find sym '(mother mom grandmother grandma granny daughter
-                       granddaughter sister sis aunt auntie niece 
+                       granddaughter sister sis aunt auntie niece
                        girlfriend bride wife)))
  )); end of female-skolem
 
 (defun unknown-gender-skolem? (x)
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-; e.g., friend3.sk (as constructed in Skolemizing "friend" in something 
+; e.g., friend3.sk (as constructed in Skolemizing "friend" in something
 ; like "John and his friend"). Return the prefix, e.g., 'FRIEND', 'CHILD'
 ; (can use in asserting name-based facts or in forward TTT rules).
 ;
@@ -356,12 +356,12 @@
          (setq lst (butlast lst 3)); strip .sk and (next line) final digits
          (setq lst (reverse (member-if-not #'digit-char-p (reverse lst))))
          (setq sym (intern (coerce lst 'string)))
-         (case sym 
-           ((child kid baby student person neighbor teacher soldier 
+         (case sym
+           ((child kid baby student person neighbor teacher soldier
              flight-attendant cop grandson son brother father dad daddy
              grandfather grandpa granddad gramps nephew cousin uncle
              granddaughter daughter sister mother mom mommy grandmother
-             grandma grandmom granny niece aunt auntie spouse husband 
+             grandma grandmom granny niece aunt auntie spouse husband
              wife friend boyfriend girlfriend partner fiance fiancee
              boss employer employee room-mate office-mate coworker coach
              basketball-coach football-coach baseball-coach hockey-coach
@@ -377,13 +377,13 @@
 ; Check if x is a name, i.e., with extension .NAME; could have used
 ; 'string-ends-in' function.
   (and (symbolp x)
-       (equal (last (coerce (string-upcase x) 'list) 5) 
+       (equal (last (coerce (string-upcase x) 'list) 5)
              '(#\. #\N #\A #\M #\E))))
 
 (defun male-name? (x)
 ; ~~~~~~~~~~~~~~~~~~~
 ; This is true for known male names like 'BEN.NAME. We rely on
-; "/u/schubert/lf-from-treebank-trees/initialize-and-preprocess.lisp" 
+; "/u/schubert/lf-from-treebank-trees/initialize-and-preprocess.lisp"
 ; having been loaded (thus making use of the "male-names.lisp" gazetteer);
 ; Also allow for titular names , e.g., 'Grandpa_Jones.name, 'Mr._Jones.name
   (or (and (symbolp x) (eq (get x 'entity-type) 'male*.n))
@@ -400,23 +400,23 @@
       (if (null suffix) (return-from titled-male-name? nil))
       (setq prefix (butlast chars (length suffix)))
       (setq prefix (intern (coerce prefix 'string)))
-      (find prefix '(mr mr. senor sir daddy grandfather granddad 
+      (find prefix '(mr mr. senor sir daddy grandfather granddad
                      grandpa uncle father rabbi imam))
             ; more could be added from KNEXT: king, emperor, sultan,
             ; prince, sheik, raja, maharaja, baron, lord, duke, earl,
-            ; marquis, count, brother, bishop, monsignor, pope, imam, 
+            ; marquis, count, brother, bishop, monsignor, pope, imam,
             ; caliph, mullah.
  )); end of titled-male-name?
 
 (defun female-name? (x)
 ; ~~~~~~~~~~~~~~~~~~~~~
 ; True for known female names like 'TANYA.NAME. We rely on
-; "/u/schubert/lf-from-treebank-trees/initialize-and-preprocess.lisp" 
+; "/u/schubert/lf-from-treebank-trees/initialize-and-preprocess.lisp"
 ; having been loaded (thus making use of the "female-names.lisp" gazetteer)
 ; Also allow for titular names , e.g., 'Grandma_Lil.name, 'Mrs._Jones.name
   (or (and (symbolp x) (eq (get x 'entity-type) 'female*.n))
       (titled-female-name? x)))
-   
+
 (defun titled-female-name? (x)
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; e.g., 'Grandma_Lil.name, 'Mrs._Jones.name;
@@ -428,7 +428,7 @@
       (if (null suffix) (return-from titled-female-name? nil))
       (setq prefix (butlast chars (length suffix)))
       (setq prefix (intern (coerce prefix 'string)))
-      (find prefix '(mrs mrs. ms ms. senora miss senorita lady madam 
+      (find prefix '(mrs mrs. ms ms. senora miss senorita lady madam
                      grandmother grandma aunt auntie))
             ; more could be added from KNEXT: queen, empress, princess,
             ; baroness, duchess, countess, sister
@@ -458,8 +458,8 @@
 (defun neuter-name? (x)
 ; ~~~~~~~~~~~~~~~~~~~~~
 ; True for known neuter names like 'CHICAGO.NAME. We rely on
-; "/u/schubert/lf-from-treebank-trees/initialize-and-preprocess.lisp" 
-; having been loaded (thus making use of the "non-personal-names.lisp" 
+; "/u/schubert/lf-from-treebank-trees/initialize-and-preprocess.lisp"
+; having been loaded (thus making use of the "non-personal-names.lisp"
 ; gazetteer)
 ;
  (and (symbolp x)
@@ -477,7 +477,7 @@
 ;~~~~~~~~~~~~~~~~~~~
 ; True for plural names like Northern_Lights.name or The_Netherlands.name
 ; (if anything like that ever occurs; more likely we'll need to deal
-; non-atomic, unscoped plurals like (:Q THE.DET (:F CONSTRUE-AS-PRED 
+; non-atomic, unscoped plurals like (:Q THE.DET (:F CONSTRUE-AS-PRED
 ; SMITHS.NAME)))
   (declare (ignore x))
   nil) ; **STUB!!
@@ -489,14 +489,14 @@
 ; can't be assumed to be complete. Typically a T result means that
 ; x names a human.
 ;
- (and (symbolp x) (name? x) (not (male-name? x)) 
+ (and (symbolp x) (name? x) (not (male-name? x))
       (not (female-name? x)) (not (neuter-name? x))))
 
-(defun female-constant? (x) 
+(defun female-constant? (x)
 ;~~~~~~~~~~~~~~~~~~~~~~~~~
   (or (female-name? x) (female-skolem? x)))
 
-(defun male-constant? (x) 
+(defun male-constant? (x)
 ;~~~~~~~~~~~~~~~~~~~~~~~~
   (or (male-name? x) (male-skolem? x)))
 
@@ -515,11 +515,11 @@
 
 (defun pron? (x)
 ; ~~~~~~~~~~~~~
-; Check if x is a pronoun, i.e., with extension .PRO or .PRON; 
+; Check if x is a pronoun, i.e., with extension .PRO or .PRON;
 ; Note that in LF-formation, pronouns are rendered without case,
 ; and are given a numeric plus .PRO or .PRON extension (both
 ; versions are allowed because it's hard to remember which one
-; is "correct"); e.g., an occurrence of "him" might have LF 
+; is "correct"); e.g., an occurrence of "him" might have LF
 ; HE3.PRO and an occurrence of "them" might have LF THEY32.PRO.
 ;
  (and (symbolp x)
@@ -528,7 +528,7 @@
 
 (defun male-pron? (x)
 ; ~~~~~~~~~~~~~~~~~~~
- (and (pron? x) 
+ (and (pron? x)
       (let ((chars (coerce (string-upcase x) 'list)))
            (and (char= (first chars) #\H)
                 (char= (second chars) #\E)))
@@ -537,7 +537,7 @@
 
 (defun female-pron? (x)
 ; ~~~~~~~~~~~~~~~~~~~~~
- (and (pron? x) 
+ (and (pron? x)
       (let ((chars (coerce (string-upcase x) 'list)))
            (and (char= (first chars) #\S)
                 (char= (second chars) #\H)
@@ -548,11 +548,11 @@
 (defun neuter-pron? (x)
 ; ~~~~~~~~~~~~~~~~~~~~~
 ; Singular neuter pronoun, i.e., "it" plus perhaps digits plus .pro(n)
-; We're neglecting "this" and "that", as these typically have 
+; We're neglecting "this" and "that", as these typically have
 ; propositional or situation/event reference (to be treated in future,
-; calling for a 'demo-pron?' or 'sing-demo-pron?' predicate); the 
+; calling for a 'demo-pron?' or 'sing-demo-pron?' predicate); the
 ; plural versions, "these" and "those", also remain to be treated.
- (and (pron? x) 
+ (and (pron? x)
       (let ((chars (coerce (string-upcase x) 'list)))
            (and (char= (first chars) #\I)
                 (char= (second chars) #\T)))
@@ -561,9 +561,9 @@
 
 (defun plural-pron? (x)
 ; ~~~~~~~~~~~~~~~~~~~
-; THEY plus digit(s) plus .PRO or .PRON; omitting "these" and 
+; THEY plus digit(s) plus .PRO or .PRON; omitting "these" and
 ; "those" for now
- (and (pron? x) 
+ (and (pron? x)
       (let ((chars (coerce (string-upcase x) 'list)))
            (and (char= (first chars) #\T)
                 (char= (second chars) #\H)
@@ -626,12 +626,12 @@
 ; but not common enough to be adequately covered by training on standard
 ; corpora, are apt to throw off the Charniak parser. This becomes less
 ; likely if periods are added to the letters. (Down side: acronyms that
-; the parser knows about may not be handled as well once puctuated.) 
+; the parser knows about may not be handled as well once puctuated.)
 ;
 ; The ones here were obtained from an international student handbook:
 ; www.agts.edu/community/international_student_handb.pdf
 ;
-  (or (find atm '(ID LA BA |PhD| PO UFO VIP)); some common ones, not all 
+  (or (find atm '(ID LA BA |PhD| PO UFO VIP)); some common ones, not all
                                                ; upper-case consonants
       (let ((chars (coerce (string atm) 'list)))
            ; fast check for unlikely acronyms
@@ -639,7 +639,7 @@
                nil
                ; more careful check: all upper case consonants?
                (not (find-if
-                    #'(lambda (ch) 
+                    #'(lambda (ch)
                         (or (not (upper-case-p ch))
                             (member ch '(#\A #\E #\I #\O #\U #\Y))))
                       chars))))
@@ -664,8 +664,8 @@
  (or (definite-det? x) (indefinite-det? x)))
 
 
-(defun definite-det? (x); allow for variants in identifying definite determiners 
-; ~~~~~~~~~~~~~~~~~~~~~~ 
+(defun definite-det? (x); allow for variants in identifying definite determiners
+; ~~~~~~~~~~~~~~~~~~~~~~
  (cond ((null x) nil)
        ((listp x) t); seems to be a DETP -- a likely definite (** improve!!)
        (t (case x ((the the.d the.dt the.det) t)
@@ -673,12 +673,12 @@
                 ; in terms of 'the', so they needn't be included here
                   (t nil))))); end of definite-det?
 
-(defun indefinite-det? (x); allow for variants in identifying indefinite determiners 
-; ~~~~~~~~~~~~~~~~~~~~~~~~ 
- (if (or (null x) (not (symbolp x))) 
+(defun indefinite-det? (x); allow for variants in identifying indefinite determiners
+; ~~~~~~~~~~~~~~~~~~~~~~~~
+ (if (or (null x) (not (symbolp x)))
      nil
-     (case x ((some a an many a-few exist exists 
-               some.d a.d an.d many.d a-few.d exist.d exists.d 
+     (case x ((some a an many a-few exist exists
+               some.d a.d an.d many.d a-few.d exist.d exists.d
                some.dt a.dt an.dt many.dt a-few.dt exist.dt exists.dt
                some.det a.det an.det many.det a-few.det exist.det exists.det) t)
              (t nil)))); end of indefinite-det?
@@ -715,9 +715,9 @@
                eighty eighty.d eighty.dt eighty.det 80.d 80.dt 80.det
                ninety ninety.d ninety.dt ninety.det 90.d 90.dt 90.det
                a-hundred a-hundred.d a-hundred.dt a-hundred.det 100.d 100.dt 100.det
-               a-thousand a-thousand.d a-thousand.dt a-thousand.det 1000.d 
+               a-thousand a-thousand.d a-thousand.dt a-thousand.det 1000.d
                                                       1000.dt 1000.det
-               a-million a-million.d a-million.dt a-million.det 1000000.d 
+               a-million a-million.d a-million.dt a-million.det 1000000.d
                                                       1000000.dt 1000000.det) t)
              (t nil)) )); end of indefinite-num-det?
 
@@ -728,7 +728,7 @@
 ; corresponding adjectival predicate, such as 'many.a', 'a-few.a', 'five.a',
 ; or '5.a'.
   (let (chars suffix-chars)
-    (if (or (null x) (not (symbolp x))) 
+    (if (or (null x) (not (symbolp x)))
         nil
         (progn (setq chars (coerce (format nil "~s" x) 'list))
                (setq suffix-chars (member #\. chars))
@@ -752,7 +752,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
 ; ; Two tests (from previous work):
-; (apply-rule *drop-decl-speech-act* 
+; (apply-rule *drop-decl-speech-act*
 ;  '(EXISTS U0 (U0 SAME-TIME NOW0)
 ;    ((SPEAKER TELL.V HEARER
 ;      (THAT
@@ -761,13 +761,13 @@
 ;         (PROG ((COLL-OF NATHANIEL.NAME Y) PLAY.V (K CATCH.N))
 ;         ** E0)))))
 ;     ** U0)))
-; 
+;
 ; (apply-rule *skol-rule*
 ;   '(EXISTS E0 (E0 AT-ABOUT NOW0)
 ;        (THE.DET Y ((Y DAD.N) AND.CC (NATHANIEL.NAME HAVE.V Y))
 ;         (PROG ((COLL-OF NATHANIEL.NAME Y) PLAY.V (K CATCH.N))
 ;         ** E0))))
-  
+
 (defun aux-indicating-request? (x)
      (find x '(can.aux-v can.aux-s will.aux-a will.aux-s would.aux-v
                would.aux-s could.aux-v could.aux-s)))
@@ -787,24 +787,24 @@
 ; ((run.v (k home.n))) past -> ((past run.v) (k home.n))
 ; (((call.v again.adv-a) later.adv-e)) pres
 ;   -> (((pres call.v) again.adv-a) later.adv-e)
-  (labels 
+  (labels
     ((rechelper (vp)
-       (cond 
+       (cond
          ;; Base case: found the verb/aux -- add tense and return.
          ((and (atom vp) (verbaux? vp)) (list tense vp))
          ;; Base case: other atom, simply return value.
          ((atom vp) vp)
          ;; Recursive case:
-         ;;  recurse left, 
+         ;;  recurse left,
          ;;    if returned val is diff, reconstruct and return
          ;;    else recurse to right.
-         (t 
+         (t
            (let ((leftrec (rechelper (car vp))))
              (if (not (equal leftrec (car vp)))
                (cons leftrec (cdr vp))
                (cons (car vp) (rechelper (cdr vp))))))))
      ) ; end of labels definitions.
-   
+
     ;; Main body.
     (if (not (listp vp+))
       (setf vp+ (list vp+)))
@@ -843,13 +843,13 @@
 
 (defun non-cf-version! (tensed-verb+comps); tested
 ;`````````````````````````````````
-; NB: 'comps' can be a sequence, 
-;     e.g., ((cf can.aux-v) just.adv-v (leave.v (the.d room.n)))   
-; NB: Assume that in ULFs for passive counterfactuals, like "I wish he were fired", 
+; NB: 'comps' can be a sequence,
+;     e.g., ((cf can.aux-v) just.adv-v (leave.v (the.d room.n)))
+; NB: Assume that in ULFs for passive counterfactuals, like "I wish he were fired",
 ;     we use (cf (pasv ...)); that's because the "be" preceding a passive is
 ;     rendered only as a tense  -- but we're taking counterfactual verbs not
 ;     to have tense to begin with! So where did the tenses below come from?
-;     They came from the embedding context; e.g., compare 
+;     They came from the embedding context; e.g., compare
 ;        "I wish I were rich" => "I AM not rich"
 ;        "(In those days) I wished I were rich" => I WAS not rich.
 ;     But passive counterfactuals like "I wish he were fired" don't have a
@@ -862,14 +862,14 @@
 ; ((cf prog) comps) -> ((pres prog) comps)  e.g., were singing -> is singing
 ; ((cf have.v) comps) -> ((pres have.v) comps)   had a car -> have a car
 ; ((cf can.aux-v) comps) -> ((pres can.aux-v) comps); sim'ly ...aux-s, would
-; 
+;
 ; ;; Telic verb phrases get a future reading.
 ; ;; Everything not classified as stative is assumed telic.
 ; ;; TODO: add temporal adverbial modiification of telicity (If I gave you money yesterday)
 ; ;; TODO: test passives
 ; ((cf (pasv <verb>)) comps) -> ((pres futr) comps)     e.g., were fired -> will be fired
 ; (cf ran) -> ((pres will.aux-s) run)   e.g., ran -> will run
-; ((cf give.v) me.pro (k money.n)) -> ((pres will.aux-s) (give.v me.pro (k money.n))) 
+; ((cf give.v) me.pro (k money.n)) -> ((pres will.aux-s) (give.v me.pro (k money.n)))
 ;
 ; PAST TENSE CASES:
 ; ;; Everything is stative in the past tense.
@@ -880,7 +880,7 @@
 ; ((cf perf) (have.v comps)) -> ((past have.v) comps)   had had a car -> had a car
 ; ((cf perf) comps) -> ((past do.aux-s) comps)  had known -> did know (actual)
 ;
-; STATIVE WOULD: 
+; STATIVE WOULD:
 ; ((cf will.aux-s) (be.v x)) -> ((pres be.v) x) ; would be in Rome -> am in Rome
 ;
 ; IMPLICIT PAST TENSE CASES (not yet handled -- needs more information to disambiguate):
@@ -890,7 +890,7 @@
 ; ((cf can.aux-v) comps) -> ((past can.aux-v) comps); sim'ly ...aux-s, would
 ; ((cf had.v) comps) -> ((past have.v) comps)   had a car -> had a car
 ; ((cf perf) comps) -> ((past perf) comps)    had known -> had known (actual)
-; METHOD: 
+; METHOD:
 ;   Deal with the special case ((pres perf-cf) comps) first;
 ;      E.g., "If I had known this, I would have ..." => "I did not know this"
 ;   Do the rest case-by-case, keying on the operand of the tense operator.
@@ -900,9 +900,9 @@
  (if (or (atom tensed-verb+comps) (not (listp (first tensed-verb+comps)))
          (not (equal 'cf (caar tensed-verb+comps))))
      (return-from non-cf-version! tensed-verb+comps))
- (let* ((tensed-verb (first tensed-verb+comps)) 
+ (let* ((tensed-verb (first tensed-verb+comps))
         (comps (cdr tensed-verb+comps))
-        (tense (first tensed-verb)) 
+        (tense (first tensed-verb))
         (verb (second tensed-verb)))
    (declare (ignore tense))
    (cond
@@ -910,24 +910,24 @@
      ((eq 'perf verb)
       (add-vp-tense! (list (car comps)) 'past))
      ; subjunctive 'were'
-     ((eq 'were.v verb) 
+     ((eq 'were.v verb)
       (cons '(pres be.v) comps))
      ;; Look for 'perf' after the auxiliary.
      ;; 'If I could have gone home' -> 'I could (was able to) go home"
-     ((and (listp (car comps)) 
-           (not (null (car comps))) 
-           (eq 'perf (caar comps))) 
+     ((and (listp (car comps))
+           (not (null (car comps)))
+           (eq 'perf (caar comps)))
       (cons `(past ,verb) (cdar comps)))
      ; stative would
      ; would be in Rome -> am in Rome
-     ((and (eq 'will.aux-s verb) (listp (car comps)) 
+     ((and (eq 'will.aux-s verb) (listp (car comps))
            (not (null (car comps))) (stative-head-verb? (caar comps)))
       (add-vp-tense! (list (car comps)) 'pres))
      ; telic would
      ; would go home -> will go home
      ((eq 'will.aux-s verb)
       (cons `(pres ,verb) comps))
-     ; basic stative 
+     ; basic stative
      ((stative-head-verb? verb)
       (cons `(pres ,verb) comps))
      ; basic telic
@@ -951,7 +951,7 @@
 ;       ((past be.v) not.aux-s seemingly.adv-s happy.a)
 ; e.g., ((past do.aux-v) abruptly.adv-a (leave.v (the.d house.n))) -->
 ;       ((past do.aux-v) not.adv-s abruptly.adv-a (leave.v (the.d house.n)))
-; e.g., ((past have.v) (a.d car.n)) --> 
+; e.g., ((past have.v) (a.d car.n)) -->
 ;       ((past do.aux-s) not.adv-s (have.v (a.d car.n)))
 ; e.g., ((pres can.aux-v) clearly.adv-a (see.v it.pro)) -->
 ;       ((pres can.aux-v) not.adv-s clearly.adv-a (see.v it.pro))
@@ -973,10 +973,10 @@
 ;
 ; Negations of future tense will get a 'probably.adv-s' in addition to more
 ; explicitly reflect the modality of future tense.
-; 
+;
  (if *debug-ulf-pragmatics*
    (format t "In negate-vp!~%Argument: ~s~%" ulf-vp))
- (if (atom ulf-vp) 
+ (if (atom ulf-vp)
      (return-from negate-vp! `(non.adv-a ,ulf-vp))); unexpected
  (let (tensed-verb comps tense verb)
       (if (member (first ulf-vp) '(pres past)) ; no complements?
@@ -989,7 +989,7 @@
       (if (or (aux? verb) (eq verb 'be.v))
         (cons tensed-verb (cons 'not.adv-s comps))
         (cons `(,tense do.aux-s)
-              (cons 'not.adv-s 
+              (cons 'not.adv-s
                     (if comps (list (cons verb comps))
                       (cons verb comps)))))
  )); end of negate-vp!
@@ -1019,10 +1019,10 @@
 (defparameter *aux-like-operators*
   '(perf prog))
 
-(defun aux-like? (verb) 
+(defun aux-like? (verb)
 ;`````````````````````
 ; verb is auxiliary like if it satisfies aux? or is a member of aux-like
-; operators. 
+; operators.
   (or (ulf:lex-aux? verb) (if (member verb *aux-like-operators*) t)))
 
 ;(defun verb? (verb); tested
@@ -1046,7 +1046,7 @@
 ; Takes a VP embedded within were-to and maps it to a semantically equivalent
 ; VP without 'were to', assuming that this VP is in an if-antecendent context.
 ; Assumes that the input is the cdr of infinitive VP.
-;   e.g. 
+;   e.g.
 ;     Full sentence: '((If.ps (I.pro ((cf were.v) (to not.adv-s (go.v (to.p-arg (k sleep.n))))))) ...)
 ;     Input: '(not.adv-s (go.v (to.p-arg (k sleep.n))))
 ;     Output: '((cf do.aux-s) not.adv-s (go.v (to.p-arg (k sleep.n))))
@@ -1109,7 +1109,7 @@
            (neg (second getnegres))
            (adv (if (= 2 (length nn-were-to-embvp)) (first nn-were-to-embvp)))
            (vp (car (last nn-were-to-embvp)))
-           (verb (car vp)) 
+           (verb (car vp))
            advvp negvp preadvvp)
       ;; GK: maybe just return the input so this is transparent if not used correctly?
       (if (< 2 (length nn-were-to-embvp)) (return-from remove-were-to! nil))
@@ -1149,7 +1149,7 @@
 ; Flattens all adv-s in a ULF.
 ;
 ; (x (*.adv-s y) z) -> (x *.adv-s y z)
-  (ttt:apply-rule *ttt-flatten-adv-s* ulf))  
+  (ttt:apply-rule *ttt-flatten-adv-s* ulf))
 
 (defparameter *ttt-past-will-to-past-do*
   '(/ (past will.aux-s)
@@ -1171,7 +1171,7 @@
   '(/ ((tense? do.aux-s) _!1)
       (add-vp-tense! (_!1) tense?)))
 (defparameter *ttt-remove-redundant-do-adv*
-  '(/ ((tense? do.aux-s) _!1 (+ (!2 adv? 
+  '(/ ((tense? do.aux-s) _!1 (+ (!2 adv?
                                     ((!3 adv-a adv-s adv-a) _!))))
       ((add-vp-tense! (_!1) tense?) +)))
 (defun remove-redundant-do (ulf)

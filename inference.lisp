@@ -22,8 +22,8 @@
 ;;  1. macro expansions or
 ;;  2. word reordering.
 (defun initial-ulf-normalization (ulf)
-  (reduce #'(lambda (acc new) (funcall new acc)) 
-          *initial-ulf-normalization-fns* 
+  (reduce #'(lambda (acc new) (funcall new acc))
+          *initial-ulf-normalization-fns*
           :initial-value ulf))
 
 ;; Functions for normalizing output.

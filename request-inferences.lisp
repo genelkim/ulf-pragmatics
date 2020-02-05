@@ -11,7 +11,7 @@
 ; Obtain a want-inference from a polite request (top-level).
 ; TTT operator ^* could be used, but we control search separately.
 ; e.g., "Can somebody help me?"
-;       (((pres can.aux-v) somebody.pro (help.v me.pro)) [?]) 
+;       (((pres can.aux-v) somebody.pro (help.v me.pro)) [?])
 ;       => "I want that somebody helps me"
 ;       (I.pro ((pres want.v) (that (somebody.pro (help.v me.pro)))))
 ; NB: ttt symbols like !, ?, ~, + etc., appearing in the ULF must
@@ -34,7 +34,7 @@
 ;       (Note: The rule could be refined to yield "...will help me")
    '(/ ((pres (! aux-indicating-request?))
         (!1 you.pro someone.pro somebody.pro)
-        (? please.adv-s) (+ ~ (^* [*h]))) 
+        (? please.adv-s) (+ ~ (^* [*h])))
        (I.pro ((pres expect.v) (that (!1 (add-vp-tense! (+) pres)))))))
   ; We'll want to potentially chain from the last part, if it enables
   ; further attitudinal, state change/cessation/inception/continuation
@@ -49,7 +49,7 @@
        (!2 not not.adv-s)
        (!3 you.pro someone.pro somebody.pro)
        (? please.adv-s) (+ ~ (^* [*h])))
-      ((I.pro ((pres want.v) !3 (to +))) 
+      ((I.pro ((pres want.v) !3 (to +)))
        or.cc
        (I.pro ((pres think.v)
                (tht (!3 ((pres should.aux-v) (+)))))))))
@@ -95,7 +95,7 @@
 (defparameter *infer-obligation-from-imperative*
   '(/ (((!1 term?)
         ((pres (!2 lex-verbaux?))
-         _+)) 
+         _+))
        [!])
       ((make-explicit! !1) ((pres (pasv obligate.v)) (to (!2 _+))))))
 

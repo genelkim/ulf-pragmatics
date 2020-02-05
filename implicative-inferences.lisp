@@ -57,8 +57,8 @@
 (defparameter *infer-from-implicative-rules-notense*
   (mapcar
     #'(lambda (r)
-        (make-instance 
-          'implicative-rule-ttt 
+        (make-instance
+          'implicative-rule-ttt
           :type (slot-value r 'type)
           :polarity (slot-value r 'polarity)
           :rule (let* ((rule (slot-value r 'rule))
@@ -70,8 +70,8 @@
 (defparameter *infer-from-implicative-rules-onlytense*
   (mapcar
     #'(lambda (r)
-        (make-instance 
-          'implicative-rule-ttt 
+        (make-instance
+          'implicative-rule-ttt
           :type (slot-value r 'type)
           :polarity (slot-value r 'polarity)
           :rule (let* ((rule (slot-value r 'rule))
@@ -89,11 +89,11 @@
               (if (equalp (slot-value x 'polarity)
                           (get-implicative-polarity ulf))
                 (slot-value x 'rule)))
-            *infer-from-implicative-rules*) 
+            *infer-from-implicative-rules*)
     (remove-aux-not ulf) :shallow t))
 
 (defun inf-result-apply-implicative-rules (ulf)
-  (let ((ttt-rules 
+  (let ((ttt-rules
           (mapcar (lambda (x)
                     (if (equalp (slot-value x 'polarity)
                                 (get-implicative-rule-polarity ulf (slot-value x 'rule)))

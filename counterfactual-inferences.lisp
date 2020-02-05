@@ -11,7 +11,7 @@
 ; For a top-level counterfactual, e.g., "If I were rich ..." or "I wish
 ; I were rich".
 ;
-; Does not look for "if" or "wish" explicitly to allow e.g., for 
+; Does not look for "if" or "wish" explicitly to allow e.g., for
 ; (if (only ...) ...); It'll also cover "John thinks that if he were rich ...",
 ; etc., if we search through the ulf.
 ;
@@ -27,7 +27,7 @@
 (defparameter *infer-falsehood-from-inverted-positive-counterfactual*
 ;```````````````````````````````````````````````````````````````````
 ; E.g., "Had I known your telephone number ..."
- '(/ ((cf (!2 verbaux?)) 
+ '(/ ((cf (!2 verbaux?))
         (!3 ~ not.adv-s not never.adv-f never.adv-s)
           ;``````````````` subj (TODO: change this to match any NP)
         (? atom? ~ not.adv-s not never.adv-f never.adv-s)
@@ -87,9 +87,9 @@
 ; [raw variants]
 ; The *-raw variants of the rules return lists of formulas instead of
 ; 'inf-result instances.
-; 
+;
 (defun infer-falsehood-from-positive-counterfactual-raw (ulf)
- (mapcar #'result-formula 
+ (mapcar #'result-formula
          (infer-falsehood-from-positive-counterfactual ulf)))
 (defun infer-falsehood-from-inverted-positive-counterfactual-raw (ulf)
  (mapcar #'result-formula
@@ -120,7 +120,7 @@
 ; If I were to not be a person -> If I were not a person
 ;
   '(/ (if.ps (_!1 ((cf (!3 were.v be.v))
-                   _? ; possible negation 
+                   _? ; possible negation
                    (to _+2))))
       (if.ps (_!1 (remove-were-to! (_? _+2))))))
 
@@ -128,7 +128,7 @@
 ;``````````````````````````````````````
 ; Were I to go to sleep -> If I were to go to sleep
 ; Were I ever to go sleep -> If I were ever to go to sleep
-  '(/ ((cf (!3 were.v be.v)) (!1 ~ adv?) ; TODO: replace [~ adv?] with [np?] 
+  '(/ ((cf (!3 were.v be.v)) (!1 ~ adv?) ; TODO: replace [~ adv?] with [np?]
                              (?4 adv?) (to _+2))
       (if.ps (!1 ((cf !3) ?4 (to _+2))))))
 
