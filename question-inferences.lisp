@@ -218,7 +218,10 @@
     (multiple-value-bind (word suffix) (ulf:split-by-suffix ulf)
       (setq some-version (cdr (assoc word *wh2some-alist*)))
       (if (not some-version) (return-from wh2some! nil))
+      ; Generate the result or by adding suffix to some-version of the word, or
+      ; handle some special cases. 
       (cond
+        ((and (eql 'd suffix) (eql 'something some-version)) 'some.d)
         ((atom some-version) (ulf:add-suffix some-version suffix))
         ((equal '(someone.pro 's) some-version) some-version)
         ((and (eql 'pq suffix) (member word '(when where))) 
@@ -228,11 +231,6 @@
         ((or (ulf:advformer? suffix) (ulf:modformer? suffix)) 
          (list suffix some-version))
         (t ulf)))))
-;        (t 
-;          (format t "ulf: ~s~%" ulf)
-;          (format t "word: ~s~%" word)
-;          (format t "suffix: ~s~%" suffix)
-;          (error "UNKNOWN wh2some! case!"))))))
 
 
 (defun wh2some-sent! (ulf)
