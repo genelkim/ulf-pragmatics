@@ -28,5 +28,5 @@ Testing is done with lisp-unit, a simple unit testing framework. Please see the
 [documentation on using
 lisp-unit](https://github.com/OdonataResearchLLC/lisp-unit/wiki). The interface
 for defining tests is pretty simple.  You can take a look at
-  test/pilot/len-pilot-tests.lisp for examples of it, though I used a couple of
+  `test/pilot/len-pilot-tests.lisp` for examples of it, though I used a couple of
   macros to reduce redundancy, so it might be hard to understand.
