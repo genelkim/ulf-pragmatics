@@ -49,46 +49,46 @@
 ) ; END get-bw-inferences-of-type
 
 
-;; (defun normalize-wh-question-presupposition (ulf)
-;; ; `````````````````````````````````````````````````````````````
-;; ; Extracts result formula and applies task-specific normalization, including
-;; ; (for now) fixing bugs, such as the presupposition having "something.d block.n"
-;; ; instead of "some.d block.n".
-;; ;
-;;   (ttt:apply-rules
-;;     '((/ (something.d _!) (some.d _!))
-;;       (/ (some.d (ulf:adj? (! ulf:noun? (plur ulf:noun?)))) (some.d !))
-;;       (/ (nquan (somehow.mod-a many.a)) some.d)
-;;       (/ (I.pro ((past ulf:verb?) _! (adv-e (! (^* (some.d _!1))))))
-;;          (I.pro ((past ulf:verb?) _!)))
-;;       (/ ((a.d _!) ((tense? be.v) _*))
-;;          ((some.d _!) ((tense? be.v) _*))))
-;;     ulf)
-;; ) ; END normalize-wh-question-presupposition
+(defun normalize-wh-question-presupposition (ulf)
+; `````````````````````````````````````````````````````````````
+; Extracts result formula and applies task-specific normalization, including
+; (for now) fixing bugs, such as the presupposition having "something.d block.n"
+; instead of "some.d block.n".
+;
+  (ttt:apply-rules
+    '((/ (something.d _!) (some.d _!))
+      (/ (some.d (ulf:adj? (! ulf:noun? (plur ulf:noun?)))) (some.d !))
+      (/ (nquan (somehow.mod-a many.a)) some.d)
+      (/ (I.pro ((past ulf:verb?) _! (adv-e (! (^* (some.d _!1))))))
+         (I.pro ((past ulf:verb?) _!)))
+      (/ ((a.d _!) ((tense? be.v) _*))
+         ((some.d _!) ((tense? be.v) _*))))
+    ulf)
+) ; END normalize-wh-question-presupposition
 
 
-;; (defun negate-wh-question-presupposition (ulf)
-;; ; `````````````````````````````````````````````
-;; ; Negates a presupposition by changing "some"/"something" to "no"/"nothing" (in
-;; ; the case of negations, we want to remove the double negative), or otherwise adding
-;; ; a negation to the ULF.
-;;   (cond
-;;     ((ttt:match-expr '(^* (! some.d something.pro)) ulf)
-;;       (ttt:apply-rules
-;;         '((/ something.pro nothing.pro)
-;;           (/ (some.d _!) (no.d _!))
-;;           (/ (nothing.pro ((? (tense? do.aux-s)) not.adv-a (ulf:verb? _*))) (everything.pro ((tense? ulf:verb?) _*)))
-;;           (/ ((no.d _!) ((? (tense? do.aux-s)) not.adv-a (ulf:verb? _*))) ((every.d _!) ((tense? ulf:verb?) _*)))
-;;           (/ (nothing.pro ((tense? ulf:verb?) not.adv-a _*)) (everything.pro ((tense? ulf:verb?) _*)))
-;;           (/ ((no.d _!) ((tense? ulf:verb?) not.adv-a _*)) ((every.d _!) ((tense? ulf:verb?) _*)))
-;;           (/ (every.d (! (^* (plur ulf:noun?)))) (all.d !)))
-;;       ulf))
-;;     (t
-;;       (ttt:apply-rules
-;;         '((/ (_! ((tense? be.v) _*)) (_! ((tense? be.v) not.adv-a _*)))
-;;           (/ (_! ((tense? ulf:verb?) _*)) (_! ((tense? do.aux-s) not.adv-a (ulf:verb? _*)))))
-;;       ulf :max-n 1 :shallow t)))
-;; ) ; END negate-wh-question-presupposition
+(defun negate-wh-question-presupposition (ulf)
+; `````````````````````````````````````````````
+; Negates a presupposition by changing "some"/"something" to "no"/"nothing" (in
+; the case of negations, we want to remove the double negative), or otherwise adding
+; a negation to the ULF.
+  (cond
+    ((ttt:match-expr '(^* (! some.d something.pro)) ulf)
+      (ttt:apply-rules
+        '((/ something.pro nothing.pro)
+          (/ (some.d _!) (no.d _!))
+          (/ (nothing.pro ((? (tense? do.aux-s)) not.adv-a (ulf:verb? _*))) (everything.pro ((tense? ulf:verb?) _*)))
+          (/ ((no.d _!) ((? (tense? do.aux-s)) not.adv-a (ulf:verb? _*))) ((every.d _!) ((tense? ulf:verb?) _*)))
+          (/ (nothing.pro ((tense? ulf:verb?) not.adv-a _*)) (everything.pro ((tense? ulf:verb?) _*)))
+          (/ ((no.d _!) ((tense? ulf:verb?) not.adv-a _*)) ((every.d _!) ((tense? ulf:verb?) _*)))
+          (/ (every.d (! (^* (plur ulf:noun?)))) (all.d !)))
+      ulf))
+    (t
+      (ttt:apply-rules
+        '((/ (_! ((tense? be.v) _*)) (_! ((tense? be.v) not.adv-a _*)))
+          (/ (_! ((tense? ulf:verb?) _*)) (_! ((tense? do.aux-s) not.adv-a (ulf:verb? _*)))))
+      ulf :max-n 1 :shallow t)))
+) ; END negate-wh-question-presupposition
 
 
 
