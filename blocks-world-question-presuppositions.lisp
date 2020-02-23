@@ -28,6 +28,7 @@
 ; `````````````````````````````````````````````````````````````````````````
 ; Gets relevant (task-specific) presupposition from a wh-question.
 ;
+  (setq *enforce-some-in-wh2some* t)
   (util:inout-intern (rawulf ulf :ulf-pragmatics :callpkg calling-package)
     (cond
       ((ttt:match-expr '(^* (at.p (what.d place.n))) ulf)
