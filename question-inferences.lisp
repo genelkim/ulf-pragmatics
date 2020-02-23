@@ -82,6 +82,12 @@
     (which . a)
     (whose . (someone.pro 's))))
 
+; Parameter to enforce that wh2some always maps to "some" rather than a more
+; natural reading such as "a".
+(defparameter *enforce-some-in-wh2some* nil)
+(defvar *some-enforced-wh2some-alist*
+  '((which . some)))
+
 (defun wh-word? (x)
   (and (atom x)
        (ulf:has-suffix? x)
@@ -216,7 +222,10 @@
   (if (not (and (atom ulf) (ulf:has-suffix? ulf))) (return-from wh2some! nil))
   (let (some-version)
     (multiple-value-bind (word suffix) (ulf:split-by-suffix ulf)
-      (setq some-version (cdr (assoc word *wh2some-alist*)))
+      (setf some-version (cdr (assoc word *wh2some-alist*)))
+      (when (and *enforce-some-in-wh2some*
+                 (assoc word *some-enforced-wh2some-alist*))
+        (setf some-version (cdr (assoc word *some-enforced-wh2some-alist*))))
       (if (not some-version) (return-from wh2some! nil))
       ; Generate the result or by adding suffix to some-version of the word, or
       ; handle some special cases.
