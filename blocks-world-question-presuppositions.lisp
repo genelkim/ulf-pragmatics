@@ -62,7 +62,9 @@
       (/ (I.pro ((past ulf:verb?) _! (adv-e (! (^* (some.d _!1))))))
          (I.pro ((past ulf:verb?) _!)))
       (/ ((a.d _!) ((tense? be.v) _*))
-         ((some.d _!) ((tense? be.v) _*))))
+         ((some.d _!) ((tense? be.v) _*)))
+      (/ ((! ulf:verb? (tense? ulf:verb?)) (a.d _!)) (! (some.d _!)))
+      )
     ulf)
 ) ; END normalize-wh-question-presupposition
 
