@@ -433,14 +433,17 @@
 ;```````````````````````````````
   (cond
     ((not (atom ulf)) nil)
-    (t (member ulf '(a.d an.d some.d)))))
+    (t (member ulf (if *enforce-some-in-wh2some*
+                     '(a.d an.d)
+                     '(a.d an.d some.d))))))
 
 (defun fix-indefinite-article! (ulf)
 ;```````````````````````````````````
 ; (a.d abbreviation.n) -> (an.d abbreviation.n)
 ; (a.d (official.a document.n)) -> (an.d (official.a document.n))
   (cond
-    ((ttt:match-expr '(indefinite-article? noun?) ulf)
+    ((and (indefinite-article? (first ulf)) ; Don't use TTT here since `indefinite-article?` can change dynamically.
+          (noun? (second ulf)))
      (let ((front-word (first (remove-if-not #'ulf2english::is-surface-token?
                                              (mapcar #'ulf:make-explicit!
                                                      (alexandria:flatten (second ulf))))))
