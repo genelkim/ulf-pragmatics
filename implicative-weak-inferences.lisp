@@ -8,8 +8,8 @@
 (defparameter *infer-from-implicative-rules-weak-notense*
   (mapcar
     #'(lambda (r)
-        (make-instance 
-          'implicative-rule-ttt 
+        (make-instance
+          'implicative-rule-ttt
           :type (slot-value r 'type)
           :polarity (slot-value r 'polarity)
           :rule (let* ((rule (slot-value r 'rule))
@@ -21,8 +21,8 @@
 (defparameter *infer-from-implicative-rules-weak-onlytense*
   (mapcar
     #'(lambda (r)
-        (make-instance 
-          'implicative-rule-ttt 
+        (make-instance
+          'implicative-rule-ttt
           :type (slot-value r 'type)
           :polarity (slot-value r 'polarity)
           :rule (let* ((rule (slot-value r 'rule))
@@ -31,9 +31,9 @@
                          vb-patt
                          rule))))
     *infer-from-implicative-rules-weak*))
-      
+
 (defun inf-result-apply-implicative-rules-weak (ulf)
-  (let ((ttt-rules 
+  (let ((ttt-rules
           (mapcar (lambda (x)
                     (if (equalp (slot-value x 'polarity)
                                 (get-implicative-rule-polarity ulf (slot-value x 'rule)))

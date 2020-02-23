@@ -9,28 +9,28 @@
 ; Did he go? -> whether he did go
 ; Will he go? -> whether he will go
 '(/ ((+ sent-mod? sent? tensed-sent? ~ wh-word?)
-     ((!5 (lex-tense? verbaux?)) ; inverted verb/aux 
-      (?1 not not.adv-s never.adv-f never.adv-s) ; 
-      _!2 ; subj. 
+     ((!5 (lex-tense? verbaux?)) ; inverted verb/aux
+      (?1 not not.adv-s never.adv-f never.adv-s) ;
+      _!2 ; subj.
       (?3 not not.adv-s never.adv-f never.adv-s) ; possible negation
       _+4) ; verb phrase
      (? [?]))
-    (whether (_!2 (!5 ?1 _+4))))) 
+    (whether (_!2 (!5 ?1 _+4)))))
 
 (defparameter *infer-nomq-from-yn-q-act-top-level*
 '(/ ((* sent-mod? sent? tensed-sent? ~ wh-word?)
      (? please.adv-s)
      ((? please.adv-s) ; TODO: we should probably just filter out please before doing this inference...
-      (!5 (lex-tense? verbaux?)) ; inverted verb/aux 
+      (!5 (lex-tense? verbaux?)) ; inverted verb/aux
       (?1 not not.adv-s never.adv-f never.adv-s) ;
-      _!2 ; subj. 
+      _!2 ; subj.
       (?6 please.adv-s)
       (?3 not not.adv-s never.adv-f never.adv-s) ; possible negation
       _+4
       (?7 please.adv-s)
       ) ; verb phrase
      [?])
-    (whether (_!2 (!5 ?1 _+4))))) 
+    (whether (_!2 (!5 ?1 _+4)))))
 
 
 (defun nomq-from-yn-q-act? (tree)
@@ -51,19 +51,19 @@
 ; Did he go? -> You know whether he did go -> You know whether he went (this last step can be post-processed -- remove unnecessary do.aux-s)
 ; Will he go? -> You know whether he will go
   '(/ (!1 nomq-from-yn-q-act?)
-      (you.pro probably.adv-s 
+      (you.pro probably.adv-s
                ((pres know.v)
-                (nomq-from-yn-q-act! !1))))) 
+                (nomq-from-yn-q-act! !1)))))
 
 (defparameter *infer-i-not-know-from-yn-q-act*
 ;`````````````````````````````````````````````````
 ; Did he go? -> You know whether he did go -> You know whether he went (this last step can be post-processed -- remove unnecessary do.aux-s)
 ; Will he go? -> You know whether he will go
   '(/ (!1 nomq-from-yn-q-act?)
-      (i.pro  
+      (i.pro
         ; probably.adv-s ; This isn't common, so remove.
-               ((pres do.aux-s) not 
-                (know.v (nomq-from-yn-q-act! !1)))))) 
+               ((pres do.aux-s) not
+                (know.v (nomq-from-yn-q-act! !1))))))
 
 (defun wh-atom? (x)
   (member x '(what.pro when.pq where.pq where.a who.pro whom.pro how.adv-s why.adv-s how.adv-a)))
@@ -112,9 +112,9 @@
 ; TODO: which dog did you pet? -> which dog you did pet; how long did you stay; what day is it
 ; TODO: in what car did you go?
   '(/ ((sub (!.7 wh-q-front?)
-       (((!.5 lex-tense?) (!.6 verbaux?)) ; inverted verb/aux 
-        ;(?1 not not.adv-s never.adv-f never.adv-s) ; 
-        _!.2 ; subj. 
+       (((!.5 lex-tense?) (!.6 verbaux?)) ; inverted verb/aux
+        ;(?1 not not.adv-s never.adv-f never.adv-s) ;
+        _!.2 ; subj.
         (?.3 not not.adv-s never.adv-f never.adv-s) ; possible negation
         _+.4)) ; verb phrase
        (? [?]))
@@ -163,17 +163,17 @@
 ; Where did you go? -> You know where you did go -> You know where you went
 ; Who did you meet? -> You know who you did meet -> You know who you met
   '(/ (! nomq-from-wh-q-act?)
-      (you.pro probably.adv-s 
+      (you.pro probably.adv-s
                ((pres know.v)
                 (nomq-from-wh-q-act! !)))))
 
 (defparameter *infer-i-not-know-from-wh-q-act*
   '(/ (! nomq-from-wh-q-act?)
-      (i.pro 
+      (i.pro
         ; probably.adv-s ; not common, so remove
              ((pres do.aux-s) not
                (know.v
-                (nomq-from-wh-q-act! !)))))) 
+                (nomq-from-wh-q-act! !))))))
 
 
 (defun find-wh-word (ulf)
@@ -218,21 +218,19 @@
     (multiple-value-bind (word suffix) (ulf:split-by-suffix ulf)
       (setq some-version (cdr (assoc word *wh2some-alist*)))
       (if (not some-version) (return-from wh2some! nil))
+      ; Generate the result or by adding suffix to some-version of the word, or
+      ; handle some special cases.
       (cond
+        ((and (eql 'd suffix) (eql 'something some-version)) 'some.d)
         ((atom some-version) (ulf:add-suffix some-version suffix))
         ((equal '(someone.pro 's) some-version) some-version)
-        ((and (eql 'pq suffix) (member word '(when where))) 
+        ((and (eql 'pq suffix) (member word '(when where)))
          (list 'adv-e some-version))
         ((and (eql 'pq suffix) (member word '(how)))
          (list 'adv-a some-version))
-        ((or (ulf:advformer? suffix) (ulf:modformer? suffix)) 
+        ((or (ulf:advformer? suffix) (ulf:modformer? suffix))
          (list suffix some-version))
         (t ulf)))))
-;        (t 
-;          (format t "ulf: ~s~%" ulf)
-;          (format t "word: ~s~%" word)
-;          (format t "suffix: ~s~%" suffix)
-;          (error "UNKNOWN wh2some! case!"))))))
 
 
 (defun wh2some-sent! (ulf)
@@ -287,7 +285,8 @@
 
 (defun apply-sub-macros! (ulf)
   (multiple-value-bind (_  res)
-    (ulf:apply-sub-macro (util:unhide-ttt-ops ulf) :calling-package *package*)
+    (ulf:apply-sub-macro (util:unhide-ttt-ops ulf)
+                         :calling-package :ulf-pragmatics)
     (declare (ignore _))
     res))
 
@@ -298,14 +297,14 @@
   '(/ ((!1 (past lex-verbaux?)) _*2 (adv-e (at.p (some.d time.n))) _*3)
       (!1 _*2 _*3)))
 (defparameter *postproc-pres-prog-at-some-time*
-  '(/ ((!1 (pres prog)) ; pres prog 
-       _*2 
+  '(/ ((!1 (pres prog)) ; pres prog
+       _*2
        (!2 (adv-e (at.p (some.d time.n)))      ; "at some time" clause here or as child.
            (^ (adv-e (at.p (some.d time.n)))))
        _*3)
       ((pres will.aux-s)
-       _*2 
-       (tttsubst! (adv-e (in.p (the.d (near.a future.n)))) 
+       _*2
+       (tttsubst! (adv-e (in.p (the.d (near.a future.n))))
                   (adv-e (at.p (some.d time.n)))
                   !2)
        _*3)))
@@ -318,7 +317,7 @@
 
 ;; TODO: move all the poss-det stuff below to ulf-lib
 (defun replace-x (xs pair)
-  (cond 
+  (cond
    ((null xs) nil)
    ((atom xs)
     (if (equal xs (first pair)) (second pair) xs))
@@ -335,9 +334,9 @@
       (their.d (they.pro 's))
       (one's.d (one.pro 's))))
 
-(defun expand-poss-det (f)  
+(defun expand-poss-det (f)
   (reduce #'replace-x *poss-det-mappings* :initial-value f))
-    
+
 (defparameter *poss-pro-mappings*
     '((mine.pro (me.pro 's))
       (yours.pro (you.pro 's))
@@ -346,21 +345,21 @@
       (its.pro (it.pro 's))
       (ours.pro (us.pro 's))
       (one's.pro (one.pro 's))))
-      
+
 (defun expand-poss-pro (f)
   (reduce #'replace-x *poss-pro-mappings* :initial-value f))
 
 
-(defparameter *lex-poss-dets* 
+(defparameter *lex-poss-dets*
   '(my your his her its our their))
 (defun poss-det? (ulf)
-  (cond 
+  (cond
     ((and (atom ulf) (ulf:has-suffix? ulf))
      (multiple-value-bind (word suffix) (ulf:split-by-suffix ulf)
        (and (eql 'd suffix) (member word *lex-poss-dets*))))
     ((and (listp ulf) (= (length ulf) 2))
-     (ttt:match-expr '(! (term? 's) 
-                         (poss-by term?) 
+     (ttt:match-expr '(! (term? 's)
+                         (poss-by term?)
                          (mod-n (poss-by term?)))
                      ulf))
     (t nil)))
@@ -377,15 +376,15 @@
 
 ;; possession and noun post-modification to have inferences.
 ;; e.g.
-;;  (something.pro ((pres be.v) (= (his.d dog.n)))) 
+;;  (something.pro ((pres be.v) (= (his.d dog.n))))
 ;;  -> (he.pro ((pres have.v) (a.d dog.n)))
-;;  (something.pro ((pres be.v) (= (the.d (n+preds insignia.n 
+;;  (something.pro ((pres be.v) (= (the.d (n+preds insignia.n
 ;;                                                 (for.p (the.d school.n)))))))
 ;;  -> ((the.d.school.n) ((pres have.v) (an.d insignia.n)))
 (defparameter *poss-postmod-to-have*
   '(
     ;; Possessives.
-    ;;  (something.pro ((pres be.v) (= (his.d dog.n)))) 
+    ;;  (something.pro ((pres be.v) (= (his.d dog.n))))
     ;;  -> (he.pro ((pres have.v) (a.d dog.n)))
     ;;  (something.pro ((pres be.v) (= ((| John| 's) name.n))))
     ;;  -> (| John| ((pres have.v) (a.d name.n)))
@@ -396,7 +395,7 @@
         (*3 phrasal-sent-op?)))
       ((poss-det-to-possessor! !2) *1 *2 *3 ((!1 have.v) (a.d !3))))
     ;; Post-modification.
-    ;;  (something.pro ((pres be.v) (= (the.d (n+preds insignia.n 
+    ;;  (something.pro ((pres be.v) (= (the.d (n+preds insignia.n
     ;;                                                 (for.p (the.d school.n)))))))
     ;;  -> ((the.d school.n) ((pres have.v) (an.d insignia.n)))
     (/ (something.pro (*1 phrasal-sent-op?)
@@ -437,12 +436,12 @@
                                              (mapcar #'ulf:make-explicit!
                                                      (alexandria:flatten (second ulf))))))
            raw-ia new-ia)
-       (setq raw-ia (util:indefinite-article 
-                      (ulf2english front-word 
+       (setq raw-ia (util:indefinite-article
+                      (ulf2english front-word
                                    :add-punct? nil
                                    :capitalize-front? nil)))
        (setq new-ia
-             (ulf:add-suffix 
+             (ulf:add-suffix
                (safe-intern raw-ia (symbol-package (first ulf)))
                'd))
        (list new-ia (second ulf))))
@@ -493,7 +492,7 @@
 ; [raw variants]
 ; The *-raw variants of the rules return lists of formulas instead of
 ; 'inf-result instances.
-; 
+;
 (defun infer-you-know-from-yn-q-act-raw (ulf)
   (mapcar #'result-formula
           (infer-you-know-from-yn-q-act ulf)))

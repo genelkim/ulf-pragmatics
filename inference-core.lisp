@@ -1,5 +1,5 @@
 ;; Gene Kim 7-27-2018
-;; 
+;;
 ;; Code for the core inference classes and mechanisms, which need to be
 ;; available to the rest of the system.
 
@@ -14,15 +14,15 @@
 (defun fully-normalize (ulf) ulf)
 ;; TODO: remove these once we load in real inference functions from
 ;; elsewhere.
-(defun premacro-implicative-inferences (ulf) 
+(defun premacro-implicative-inferences (ulf)
   (declare (ignore ulf))
   nil)
-(defun it-cleft-inferences (ulf) 
+(defun it-cleft-inferences (ulf)
   (declare (ignore ulf))
   nil)
 (defun natural-logic-entailments (ulfs)
   (declare (ignore ulfs))
-  nil) 
+  nil)
 (defun implicative-entailments (ulf)
   (append
     (inf-result-apply-implicative-rules ulf)
@@ -74,10 +74,10 @@
        (let (result infered? infres recurd)
          (setq result (ttt:apply-rule rule tree :shallow t :max-n max-per-level))
          (setq infered? (and result (not (equal result tree))))
-         (if infered? 
+         (if infered?
            ;; Construct inference result if one was made.
            (setq infres
-                 (make-instance 
+                 (make-instance
                    'inf-result
                    :result-formula (util:unhide-ttt-ops result)
                    :inf-rule rule
@@ -97,7 +97,7 @@
            ((and shallow infered?) (list infres))
            (shallow nil)
            ;; [Recursive cases]
-           (t 
+           (t
              (setq recurd
                    ;; TODO: should we be recursing with mapcar rather than car and cdr?
                    ;;       the assumption generally is that one is operator and rest operand

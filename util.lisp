@@ -62,7 +62,7 @@
 
 (defun get-ttt-rule-ulf-segments (ulf ttt-rule)
   (let* ((search-result
-          (call-tfdfs-par 
+          (call-tfdfs-par
             ulf
             (until-fn
               #'(lambda (x)
@@ -75,7 +75,7 @@
 
 (defun results-from-applying-rules (rule-names ulfs filter-out-failures)
 ;``````````````````````````````````````````````````````````````````````
-; To apply a list of rules to a list of ulfs, to obtain a list of all possible 
+; To apply a list of rules to a list of ulfs, to obtain a list of all possible
 ; results (possibly nil) for each fact, in the format (fact result1 ... resultk)
 ; If 'filter-out-failures' is non-nil, facts that didn't produce inferences
 ; are omitted from the results.
@@ -84,23 +84,23 @@
 ; from applying the rule.
 ;
 ; We first hide (square-bracket) any ttt-op symbols in the ulfs. Note that
-; rules that look for '?', '!', '+', '*', '{}', etc. (which they don't at 
-; the time of writing (Nov 7/17)) should be formulated using [?], [!], [+], 
+; rules that look for '?', '!', '+', '*', '{}', etc. (which they don't at
+; the time of writing (Nov 7/17)) should be formulated using [?], [!], [+],
 ; [*], [{}] etc. At the end we "unhide" the bracketed punctuation.
 ;
- (cond ((or (null rule-names) (null ulfs)) 
+ (cond ((or (null rule-names) (null ulfs))
         (return-from results-from-applying-rules nil))
-       ((or (atom rule-names) (atom ulfs)) 
+       ((or (atom rule-names) (atom ulfs))
         (return-from results-from-applying-rules
-          (format nil "** Improper use of 'results-from-applying-rules': ~s, ~s" 
+          (format nil "** Improper use of 'results-from-applying-rules': ~s, ~s"
                       rule-names ulfs))))
  (let (ulfs[] result results)
       (setq ulfs[] (mapcar #'hide-ttt-ops ulfs))
       (dolist (ulf ulfs[])
-          (setq result 
-             (apply #'append 
+          (setq result
+             (apply #'append
                     (mapcar #'(lambda (f) (funcall f ulf)) rule-names)))
-          (if result 
+          (if result
             (push (cons ulf (remove nil result)) results)
             (if (not filter-out-failures) (push (list ulf) results))))
       (mapcar #'unhide-ttt-ops (reverse results)))
@@ -186,7 +186,7 @@
 
 ;; Sample tfdfs evaluation function : runs until 'm' increments are reached
 (defun until-m (m)
-  (labels 
+  (labels
     ((out (n)
       (lambda (tree)
         (labels
