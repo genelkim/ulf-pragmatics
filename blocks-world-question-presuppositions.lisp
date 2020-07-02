@@ -32,14 +32,17 @@
   (util:inout-intern (rawulf ulf :ulf-pragmatics :callpkg calling-package)
     (cond
       ((ttt:match-expr '(^* (at.p (what.d place.n))) ulf)
-        (ttt:apply-rule '(/ ((sub (at.p (what.d place.n)) _!) qmark?)
-                          (you.pro ((pres know.v) (ans-to (sub where.pq _!))))) ulf))
+        (ttt:apply-rules '(
+          (/ ((sub (at.p (what.d place.n)) _!) qmark?)
+             (you.pro ((pres know.v) (ans-to (sub where.pq _!)))))
+          (/ (sub where.pq (^* (adv-a _!))) (sub where.a ^*)))
+        ulf))
       ((ttt:match-expr '(^* (of.p (what.d color.n))) ulf)
         (if (ttt:match-expr '(^* most-n) ulf)
           (get-bw-inferences-of-type ulf 'infer-existence-from-bw-superlative)
           (get-bw-inferences-of-type ulf 'infer-existence-from-definite-n+preds)))
       (t (get-bw-inferences-of-type ulf 'infer-presuppositions-from-wh-q))))
-) ; END get-wh-question-presuppositions
+) ; END get-wh-question-presupposition
 
 
 (defun get-bw-inferences-of-type (ulf type)
