@@ -294,7 +294,7 @@
 
 (defun apply-sub-macros! (ulf)
   (multiple-value-bind (_  res)
-    (ulf:apply-sub-macro (util:unhide-ttt-ops ulf)
+    (ulf:apply-sub-macro (unhide-ttt-ops ulf)
                          :calling-package :ulf-pragmatics)
     (declare (ignore _))
     res))

@@ -46,7 +46,7 @@
       #'(lambda (x)
           (make-instance
             'inf-result
-            :result-formula (util:unhide-ttt-ops x)
+            :result-formula (unhide-ttt-ops x)
             :inf-rule 'existence-from-bw-superlative
             :src-local-ulf nil
             :src-parent-ulf nil
