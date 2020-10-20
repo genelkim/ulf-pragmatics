@@ -100,7 +100,7 @@
       #'(lambda (x)
           (make-instance
             'inf-result
-            :result-formula (util:unhide-ttt-ops x)
+            :result-formula (unhide-ttt-ops x)
             :inf-rule 'possession-from-genitive
             :src-local-ulf nil
             :src-parent-ulf nil
@@ -115,13 +115,13 @@
 (defun subst-relativizer! (newval ulfwrel)
   (subst-if newval #'ulf:lex-rel? ulfwrel))
 (defun subst-relativizer-apply-subrep! (newval ulfwrel)
-  (util:hide-ttt-ops
+  (hide-ttt-ops
     (nth-value
       1 (ulf:apply-sub-macro ; TODO: write another sub-macro function that just returns the value...
           (nth-value
             1 (ulf:apply-rep-macro
                 (subst-relativizer! newval
-                                    (util:unhide-ttt-ops ulfwrel))
+                                    (unhide-ttt-ops ulfwrel))
                 :calling-package :ulf-pragmatics))
           :calling-package :ulf-pragmatics))))
 
@@ -192,7 +192,7 @@
       #'(lambda (x)
           (make-instance
             'inf-result
-            :result-formula (util:unhide-ttt-ops x)
+            :result-formula (unhide-ttt-ops x)
             :inf-rule 'existence-from-definite-n+preds
             :src-local-ulf nil
             :src-parent-ulf nil

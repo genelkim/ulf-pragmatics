@@ -63,7 +63,7 @@
      :initform (error "Must supply a src-full-ulf")
      :accessor src-full-ulf)))
 
-;; This is a version of 'cl-util:ttt-all-rule-result' that returns a list of
+;; This is a version of 'ttt:ttt-all-rule-result' that returns a list of
 ;; inf-result classes rather than simply the inferred formulas.
 (defun all-ttt-rule-inf-result (tttrule roottree &key (shallow nil)
                                                       (max-per-level 1))
@@ -79,10 +79,10 @@
            (setq infres
                  (make-instance
                    'inf-result
-                   :result-formula (util:unhide-ttt-ops result)
+                   :result-formula (unhide-ttt-ops result)
                    :inf-rule rule
-                   :src-local-ulf (util:unhide-ttt-ops tree)
-                   :src-parent-ulf (util:unhide-ttt-ops parent)
+                   :src-local-ulf (unhide-ttt-ops tree)
+                   :src-parent-ulf (unhide-ttt-ops parent)
                    :src-full-ulf root)))
          (cond
            ;; [Base cases]
@@ -114,5 +114,5 @@
      ) ; end of labels definitions.
 
     ;; Main body.
-    (rec-helper tttrule (util:hide-ttt-ops roottree) nil roottree)))
+    (rec-helper tttrule (hide-ttt-ops roottree) nil roottree)))
 
