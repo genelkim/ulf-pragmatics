@@ -3,7 +3,7 @@
 
 (asdf:defsystem :ulf-pragmatics
   :name "ulf-pragmatics"
-  :version "0.0.1"
+  :version "0.0.2"
   :author "Gene Louis Kim"
   :depends-on (:ttt :cl-strings :gute :ulf-lib :ulf2english :lisp-unit :uiop)
   :components ((:file "package")
