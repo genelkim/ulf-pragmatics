@@ -196,7 +196,7 @@
          (t nil))))
     (let ((res (recfn ulf)))
       (if res (first res) res))))
-(util:memoize 'find-wh-word)
+(memoize 'find-wh-word)
 
 
 (defun contains-wh? (ulf)
@@ -444,14 +444,14 @@
   (cond
     ((and (indefinite-article? (first ulf)) ; Don't use TTT here since `indefinite-article?` can change dynamically.
           (noun? (second ulf)))
-     (let ((front-word (first (remove-if-not #'ulf2english::is-surface-token?
+     (let ((front-word (first (remove-if-not #'ulf2english::surface-token?
                                              (mapcar #'ulf:make-explicit!
                                                      (alexandria:flatten (second ulf))))))
            raw-ia new-ia)
-       (setq raw-ia (util:indefinite-article
-                      (ulf2english front-word
-                                   :add-punct? nil
-                                   :capitalize-front? nil)))
+       (setq raw-ia (indefinite-article
+                      (intern (ulf2english front-word
+                                           :add-punct? nil
+                                           :capitalize-front? nil))))
        (setq new-ia
              (ulf:add-suffix
                (safe-intern raw-ia (symbol-package (first ulf)))

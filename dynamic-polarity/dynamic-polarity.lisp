@@ -1,9 +1,9 @@
 ; Gene Kim 7-17-2018
-; Functions for get polarity annotations from a ULF formula dynamically. 
+; Functions for get polarity annotations from a ULF formula dynamically.
 ;
 ; These functions currently rely on using the Stanford CoreNLP polarity
 ; annotations from the NatLog project. This is retrieved by running the java
-; program. Please make sure you have java appropriately configured and 
+; program. Please make sure you have java appropriately configured and
 ; have the necessary corenlp jars. run_natlog.sh is the simple script that
 ; we use to call the java program and shows what dependencies are needed.
 
@@ -19,10 +19,10 @@
 ;; run-natlog takes a list of sentence strings and obtains polarity annotations
 ;; at the token level via the Stanford CoreNLP NatLog system. The returned
 ;; value is a list of pairs, where each pair is the token string followed by
-;; the polarity, e.g. 
-;;  Input: '("all cats have tails" 
+;; the polarity, e.g.
+;;  Input: '("all cats have tails"
 ;;           ...)
-;;  Output: '((("all" +) ("cats" -) ("have" +) ("tails" +)) 
+;;  Output: '((("all" +) ("cats" -) ("have" +) ("tails" +))
 ;;            ...)
 ;; NB: The input strings MUST NOT contain any newlines. Newlines will cause
 ;;     the sentence to be treated as separate sentences.
@@ -33,17 +33,35 @@
   ;; 4. Reformat into desired format.
   (let* ((tempfile-raw ".natlog_raw2.temp")
          (tempfile-ann ".natlog_ann2.temp")
-         (full-tempfile-raw (concatenate 'string *dynamic-polarity-dir*
-                                         "/"
+         (full-tempfile-raw (concatenate 'string
+                                         (namestring *dynamic-polarity-dir*)
                                          tempfile-raw))
-         (full-tempfile-ann (concatenate 'string *dynamic-polarity-dir*
-                                         "/"
+         (full-tempfile-ann (concatenate 'string
+                                         (namestring *dynamic-polarity-dir*)
                                          tempfile-ann))
          raw-fh ann-fh natlog-stranns newstrs)
-    
+
+    ;; 0. Ensure we have the necessary jars.
+    (let ((cwd (uiop:getcwd))
+          (jar1 (merge-pathnames
+                  (parse-namestring "jars/stanford-corenlp-3.9.1.jar")
+                  *dynamic-polarity-dir*))
+          (jar2 (merge-pathnames
+                  (parse-namestring "jars/stanford-corenlp-3.9.1-models.jar")
+                  *dynamic-polarity-dir*)))
+      (when (not (and (probe-file jar1) (probe-file jar2)))
+        (uiop:chdir *dynamic-polarity-dir*)
+        (ensure-directories-exist
+          (merge-pathnames (parse-namestring "jars/")
+                           *dynamic-polarity-dir*))
+        (format t "Running get-jars.sh (this takes a while...)")
+        (finish-output)
+        (uiop:run-program "./get-jars.sh" :output *standard-output*)
+        (uiop:chdir cwd)))
+
     ;; 1. Write string to temporary file.
-    (setq newstrs (if memoize 
-                    (remove-if #'(lambda (s) (gethash s *run-natlog-memo*)) 
+    (setq newstrs (if memoize
+                    (remove-if #'(lambda (s) (gethash s *run-natlog-memo*))
                                strlst)
                     strlst))
     (when newstrs
@@ -54,18 +72,17 @@
         (close raw-fh)
         ;; 2. Run shell script
         ;; TODO: suppress shell output (or make a flag for it).
-        ;; TODO: change to run-program or inferior-shell
-        ;(asdf:run-shell-command 
+        ;(asdf:run-shell-command
         (uiop:run-program
-          (format nil 
-                  (concatenate 'string 
-                               *dynamic-polarity-dir* 
-                               "/run_natlog.sh ~a ~a ~a") 
-                  *dynamic-polarity-dir* tempfile-raw tempfile-ann))
+          (format nil
+                  (concatenate 'string
+                               (namestring *dynamic-polarity-dir*)
+                               "run_natlog.sh ~a ~a ~a")
+                  (namestring *dynamic-polarity-dir*) tempfile-raw tempfile-ann))
         ;; 3. Read in tokenized string and annotations
         (setq ann-fh (open full-tempfile-ann))
-        (setq natlog-stranns 
-              (mapcar #'(lambda (x) 
+        (setq natlog-stranns
+              (mapcar #'(lambda (x)
                           (declare (ignore x))
                           (list (read-line ann-fh)
                                 (read-line ann-fh)))
@@ -74,7 +91,7 @@
         ;; Delete files.
         (delete-file full-tempfile-raw)
         (delete-file full-tempfile-ann)))
-    
+
     ;; 3b. Save new memos and lookup previous memos to combine with new output.
     (if memoize
       (dolist (raw-nl-strann (mapcar #'list strlst natlog-stranns))
@@ -90,20 +107,20 @@
     ;; 4. Reformat into desired format.
     ;; Words (as tokenized by NatLog) are paired with the corresponding
     ;; polarity, where the polarity is represented as one of [+,-,o].
-    (mapcar 
+    (mapcar
       #'(lambda (strann)
           (let ((natlog-str (first strann))
                 (natlog-ann (second strann)))
-            (mapcar #'list 
+            (mapcar #'list
                     (cl-strings:split (cl-strings:clean natlog-str))
                     (mapcar #'(lambda (natlog-pol)
                                 (cond ((equal natlog-pol "down") '-)
                                       ((equal natlog-pol "up") '+)
                                       ((equal natlog-pol "flat") 'o)))
-                            (cl-strings:split 
+                            (cl-strings:split
                               (cl-strings:clean natlog-ann))))))
       natlog-stranns)))
-(util:memoize 'run-natlog)
+(memoize 'run-natlog)
 
 ;; Run NatLog on a list of ULFs.
 (defun run-natlog-ulfs (ulfs)
@@ -132,11 +149,11 @@
   ;; TODO: need to handle underscored tokens... and strings?
   (labels
     ((clean-str (str)
-       (util:remove-punctuation
+       (remove-punctuation
          (string-downcase str)))
 
-     (rec-helper (u p) 
-       (cond 
+     (rec-helper (u p)
+       (cond
          ;; If nil, return (nil pol)
          ((null u)
           (list nil p))
@@ -161,17 +178,17 @@
               (list (list (list (first u) pp)
                           (list (second u) pp))(cdr p))
               (list u p))))
-            
+
          ;; If token, do token comparison.
-         ((and (atom u) (ulf2english::is-surface-token? u))
-          (let ((ptoks (mapcar #'car (subseq p 0 (min *polarity-alignment-window-size* 
+         ((and (atom u) (ulf2english::surface-token? u))
+          (let ((ptoks (mapcar #'car (subseq p 0 (min *polarity-alignment-window-size*
                                                       (length p)))))
                 (pps (mapcar #'cadr (subseq p 0 (min *polarity-alignment-window-size*
                                                      (length p)))))
-                (procu (funcall (util:compose
-                                  #'ulf2english::post-format-ulf-string 
-                                  #'ulf:strip-suffix 
-                                  #'util:atom2str) 
+                (procu (funcall (compose
+                                  #'ulf2english::post-format-ulf-string
+                                  #'ulf:strip-suffix
+                                  #'atom2str)
                                 u)))
             ;; If any of the NatLog tokens in the given window is a
             ;; subsequence, then mark the current ULF with the polarity.
@@ -181,7 +198,7 @@
                         (pp (nth i pps)))
                     (if (search (clean-str ptok) (clean-str procu))
                       ;; TODO: Factorize this so it doesn't sue return-from
-                      (return-from rec-helper (list (list u pp) 
+                      (return-from rec-helper (list (list u pp)
                                                     (nthcdr (1+ i) p))))))
             (list u p)))
 
@@ -199,7 +216,7 @@
 
     ;; Strip off the returned remaining polarity.
     (first (rec-helper ulf pol)))) ; end of align-ulf-polarity
- 
+
 ;; Infers polarities for a complete ULF given polarity annotations of tokens
 ;; corresponding to surface strings.
 (defun infer-polarities (ulf)
@@ -218,7 +235,7 @@
      ;;   1. Recurse right-most and get polarity.
      ;;   2. Recurse to other children with polarity.
      (updown-helper (f parentpol)
-       (cond 
+       (cond
          ;; Error condition.
          ((and (atom f) (null parentpol))
           (error "updown-helper precondition starting polarity annotations has failed"))
@@ -230,7 +247,7 @@
          ;; then propagate to other children.
          (t (let* (;; Get current polarity -- nil if None.
                    (curpol (if (polar? f)
-                             (car (last f)) 
+                             (car (last f))
                              nil))
                    ;; Remove polarity if one exists.
                    (npf (if curpol (second f) f))
@@ -238,12 +255,12 @@
                    (rrec (updown-helper (car (reverse npf)) parentpol))
                    (rpol (second rrec))
                    ;; Update polarity.
-                   (newpol (if curpol curpol rpol))) 
+                   (newpol (if curpol curpol rpol)))
               ;; Recurse to rest and return.
               (list
-                (reverse (cons rrec      
-                               (mapcar #'(lambda (x) 
-                                           (updown-helper x newpol)) 
+                (reverse (cons rrec
+                               (mapcar #'(lambda (x)
+                                           (updown-helper x newpol))
                                        (cdr (reverse npf)))))
                 newpol)))))
      ;; Rightmost polarity for default rightmost polarity.
@@ -254,7 +271,7 @@
          (t
            (loop for e in (reverse f) do
                  (let ((res (rightmost-polarity e)))
-                   (when res 
+                   (when res
                      (return-from rightmost-polarity res))))
            nil)))
      ) ; end of labels defs
@@ -270,7 +287,7 @@
 
 
 ;; Annotates the ULF with polarity. The polarity annotations are incomplete so
-;; some segments 
+;; some segments
 (defun annotate-polarity (ulf)
   (infer-polarities         ; complete polarity coverage
     (align-ulf-polarity     ; align text polarity to ulf
@@ -281,8 +298,8 @@
 
 ;; Returns the polarity for the given segment of the ulf and its parent.
 ;; NB: 'segment' and 'parent' must be referentially equivalent to the
-;;      corresponding segments within the 'fullulf'. This is necessary to 
-;;      ensure correctness when there are equivalent subsegments in different 
+;;      corresponding segments within the 'fullulf'. This is necessary to
+;;      ensure correctness when there are equivalent subsegments in different
 ;;      contexts, e.g.
 ;;       I am a person, but Spot is not a person.
 ;;     The first occurrence is in a positive context (we can substitute in
@@ -298,7 +315,7 @@
 (defun get-segment-polarity (segment parent fullulf)
   (labels
     (
-     ;; Searches rawulf and polulf for segment that matches in rawulf and 
+     ;; Searches rawulf and polulf for segment that matches in rawulf and
      ;; returns the corresponding polarity in polulf. If no match is found,
      ;; returns nil.
      (find-segment (rawulf parulf polulf)
@@ -315,9 +332,9 @@
            ;; Base case.
            ((atom rawulf) nil)
            ;; Recursive case.
-           (t (reduce #'(lambda (acc new) 
+           (t (reduce #'(lambda (acc new)
                           (if acc acc
-                            (apply #'find-segment 
+                            (apply #'find-segment
                                    (list (first new) rawulf (second new)))))
                       (mapcar #'list rawulf nopolulf) ; zip raw and polar
                       :initial-value nil)))))

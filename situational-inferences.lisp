@@ -20,7 +20,7 @@
 ; nil.
 ;; TODO: make a robust version that checks the types and searches everything.
 ;; For now, just look for one of the tenses.
-  (let ((tenses (util:tree-find-if ulf #'ulf:lex-tense?)))
+  (let ((tenses (tree-find-if ulf #'ulf:lex-tense?)))
     (if tenses (first tenses) nil)))
 
 

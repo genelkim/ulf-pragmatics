@@ -10,8 +10,7 @@
       (car (infer-presuppositions-from-wh-q-raw ulf))
       :calling-package *package*)
     (funcall
-      (util:compose
-        #'trivial-output-normalization 
+      (compose
         #'fix-indefinite-articles
         #'filter-for-some-reason
         #'poss-postmod-to-have! 

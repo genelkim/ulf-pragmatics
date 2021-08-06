@@ -1,6 +1,7 @@
 ;; Gene Kim 7-24-2018
 
-(load "load")
+;(load "load")
+(ql:quickload :ulf-pragmatics)
 
 ;; Load testing code.
 (load "test/test-util.lisp")
