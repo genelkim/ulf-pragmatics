@@ -111,10 +111,10 @@
 (defun get-implicative-polarity (ulf)
   (let ((seg (get-ulf-segments-vp ulf)))
     (get-segment-polarity (first seg) (second seg) (third seg))))
-(util:memoize 'get-implicative-polarity)
+(memoize 'get-implicative-polarity)
 
 (defun get-implicative-rule-polarity (ulf rule)
   (let ((seg (get-ttt-rule-ulf-segments ulf rule)))
     (get-segment-polarity (first seg) (second seg) (third seg))))
-;(util:memoize 'get-implicative-rule-polarity)
+;(memoize 'get-implicative-rule-polarity)
 

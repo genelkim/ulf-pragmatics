@@ -18,7 +18,7 @@
 ; the ULF of the presupposition.
 ; NOTE: Currently unused due to TTT/package bug
 ;
-  (util:inout-intern (rawulf ulf :ulf-pragmatics :callpkg calling-package)
+  (inout-intern (rawulf ulf :ulf-pragmatics :callpkg calling-package)
     (negate-wh-question-presupposition (normalize-wh-question-presupposition
       (get-wh-question-presupposition ulf))))
 ) ; END get-response-to-bw-presupposition-failure
@@ -29,7 +29,7 @@
 ; Gets relevant (task-specific) presupposition from a wh-question.
 ;
   (setq *enforce-some-in-wh2some* t)
-  (util:inout-intern (rawulf ulf :ulf-pragmatics :callpkg calling-package)
+  (inout-intern (rawulf ulf :ulf-pragmatics :callpkg calling-package)
     (cond
       ((ttt:match-expr '(^* (at.p (what.d place.n))) ulf)
         (ttt:apply-rules '(

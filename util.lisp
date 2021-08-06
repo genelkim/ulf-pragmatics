@@ -58,7 +58,7 @@
 ;; Renaming for ttt:apply-rule for the sole purpose of focused memoizing.
 (defun apply-ttt-rule (ttt-rule x)
   (ttt:apply-rule ttt-rule x))
-(util:memoize 'apply-ttt-rule)
+(memoize 'apply-ttt-rule)
 
 (defun get-ttt-rule-ulf-segments (ulf ttt-rule)
   (let* ((search-result

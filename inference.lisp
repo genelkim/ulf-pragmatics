@@ -94,5 +94,5 @@
                       (output-ulf-normalization (result-formula inf-res)))
                 inf-res)
             rawinfs)))
-(util:memoize 'infer-all)
+(memoize 'infer-all)
 
